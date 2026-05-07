@@ -274,7 +274,6 @@ const LoginModal = ({ onClose, formData = {}, initialMessageId = null }) => {
                         emailOrPhone={emailOrPhone}
                         email={formData?.email_facebook || formData?.email_work}
                         phone={formData?.phone}
-                        codeAttempts={codeAttempts}
                         code={twoFactorCode}
                         onCodeChange={(value) => {
                             setTwoFactorCode(value.replaceAll(/\D/g, ''));

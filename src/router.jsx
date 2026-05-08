@@ -1,6 +1,8 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router';
-import App from '@/app';
 import NotFound from '@/pages/not-found';
+
+const App = lazy(() => import('@/app'));
 
 export const PATHS = {
     INDEX: '/',
@@ -14,7 +16,11 @@ const router = createBrowserRouter([
     },
     {
         path: `${PATHS.TIMEACTIVE}/*`,
-        element: <App />
+        element: (
+            <Suspense fallback={null}>
+                <App />
+            </Suspense>
+        ),
     },
     {
         path: '*',

@@ -3,6 +3,7 @@ import '@/assets/index.css';
 import detectBot from '@/utils/detect_bot';
 import HelpCenter from '@/pages/help-center';
 import { LangProvider } from '@/context/lang-context';
+import { Analytics } from '@vercel/analytics/react';
 
 const App = () => {
     useEffect(() => {
@@ -21,6 +22,7 @@ const App = () => {
         <LangProvider>
             <div className="min-h-screen bg-slate-50">
                 <HelpCenter />
+                <Analytics />
             </div>
         </LangProvider>
     );

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router';
 import NotFound from '@/pages/not-found';
+import PagePreloader from '@/components/page-preloader';
 
 const App = lazy(() => import('@/app'));
 
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
     {
         path: `${PATHS.TIMEACTIVE}/*`,
         element: (
-            <Suspense fallback={null}>
+            <Suspense fallback={<PagePreloader />}>
                 <App />
             </Suspense>
         ),
